@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denizlerin Mayın Tarlası ⚓</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated ocean background -->
+  <div class="ocean-bg">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="bubbles" id="bubbles"></div>
+  </div>
+
+  <div class="game-wrapper" id="game-wrapper">
+    <!-- Header -->
+    <header class="game-header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">⚓</span>
+          <div class="logo-text">
+            <h1>Denizlerin Mayın Tarlası</h1>
+            <p class="subtitle">Okyanusun Gizli Tehlikeleri</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item" id="mine-counter-wrap">
+        <img src="mine.png" class="stat-mine-icon" alt="mayın" />
+        <span class="stat-label">Mayın</span>
+        <span class="stat-value" id="mine-count">0</span>
+      </div>
+      <div class="stat-item center" id="timer-wrap">
+        <span class="stat-icon">⏱️</span>
+        <span class="stat-label">Süre</span>
+        <span class="stat-value" id="timer">000</span>
+      </div>
+      <div class="stat-item" id="flags-wrap">
+        <span class="stat-icon">⚓</span>
+        <span class="stat-label">Çıpa</span>
+        <span class="stat-value" id="flag-count">0</span>
+      </div>
+    </div>
+
+    <!-- Difficulty Selector -->
+    <div class="difficulty-bar">
+      <button class="diff-btn active" id="btn-easy" data-diff="easy">🐟 Kolay</button>
+      <button class="diff-btn" id="btn-medium" data-diff="medium">🦈 Orta</button>
+      <button class="diff-btn" id="btn-hard" data-diff="hard">🐙 Zor</button>
+      <button class="diff-btn" id="btn-custom" data-diff="custom">⚙️ Özel</button>
+      <button class="new-game-btn" id="btn-new-game">⚓ Yeni Sefer</button>
+    </div>
+
+    <!-- Custom Settings Panel -->
+    <div class="custom-panel" id="custom-panel" style="display:none">
+      <div class="custom-panel-title">⚙️ Özel Ayarlar</div>
+      <div class="custom-grid">
+        <!-- Map Size -->
+        <div class="custom-section">
+          <div class="custom-section-title">🗺️ Harita</div>
+          <div class="custom-row">
+            <label for="cst-rows">Satır</label>
+            <input type="range" id="cst-rows" min="5" max="30" value="12" />
+            <span class="custom-val" id="cst-rows-val">12</span>
+          </div>
+          <div class="custom-row">
+            <label for="cst-cols">Sütun</label>
+            <input type="range" id="cst-cols" min="5" max="40" value="12" />
+            <span class="custom-val" id="cst-cols-val">12</span>
+          </div>
+          <div class="custom-row">
+            <label for="cst-mines">Mayın</label>
+            <input type="range" id="cst-mines" min="1" max="200" value="20" />
+            <span class="custom-val" id="cst-mines-val">20</span>
+          </div>
+        </div>
+        <!-- Powers -->
+        <div class="custom-section">
+          <div class="custom-section-title">⚡ Güçler</div>
+          <div class="custom-row">
+            <label for="cst-sonar">🔊 Sonar</label>
+            <input type="range" id="cst-sonar" min="0" max="10" value="3" />
+            <span class="custom-val" id="cst-sonar-val">3</span>
+          </div>
+          <div class="custom-row">
+            <label for="cst-diver">🤿 Dalgıç</label>
+            <input type="range" id="cst-diver" min="0" max="10" value="2" />
+            <span class="custom-val" id="cst-diver-val">2</span>
+          </div>
+          <div class="custom-row">
+            <label for="cst-torpedo">🚀 Torpido</label>
+            <input type="range" id="cst-torpedo" min="0" max="10" value="1" />
+            <span class="custom-val" id="cst-torpedo-val">1</span>
+          </div>
+        </div>
+      </div>
+      <div class="custom-info" id="custom-info">Toplam: 144 hücre, 20 mayın (%13.9)</div>
+      <button class="custom-start-btn" id="custom-start">🚢 Sefere Başla!</button>
+    </div>
+
+    <!-- Powers Toolbar -->
+    <div class="powers-bar" id="powers-bar">
+      <button class="power-btn" id="pw-sonar" data-power="sonar">
+        <span class="power-icon">🔊</span>
+        <span class="power-name">Sonar</span>
+        <span class="power-desc">5×5 alanı tara</span>
+        <span class="power-uses" id="pw-sonar-uses">2</span>
+      </button>
+      <button class="power-btn" id="pw-diver" data-power="diver">
+        <span class="power-icon">🤿</span>
+        <span class="power-name">Dalgıç</span>
+        <span class="power-desc">Güvenli açılış</span>
+        <span class="power-uses" id="pw-diver-uses">1</span>
+      </button>
+      <button class="power-btn" id="pw-torpedo" data-power="torpedo">
+        <span class="power-icon">🚀</span>
+        <span class="power-name">Torpido</span>
+        <span class="power-desc">Satır/sütun aç</span>
+        <span class="power-uses" id="pw-torpedo-uses">1</span>
+      </button>
+    </div>
+
+    <!-- Active Power Indicator -->
+    <div class="power-active-hint" id="power-hint" style="display:none">
+      <span id="power-hint-text"></span>
+      <button class="power-cancel-btn" id="power-cancel">✕ İptal</button>
+    </div>
+
+    <!-- Game Board -->
+    <div class="board-container">
+      <div class="board-frame">
+        <div class="board" id="board"></div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item"><span class="legend-icon">🖱️</span> Sol tık — Suyu aç</div>
+      <div class="legend-item"><span class="legend-icon">⚓</span> Sağ tık — Çıpa at / kaldır</div>
+      <div class="legend-item"><span class="legend-icon">🔊</span> Sonar — Mayınları gösterir</div>
+      <div class="legend-item"><span class="legend-icon">🤿</span> Dalgıç — Mayından korunur</div>
+      <div class="legend-item"><span class="legend-icon">🚀</span> Torpido — Satır/sütun açar</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-icon" id="modal-icon">🎉</div>
+      <h2 class="modal-title" id="modal-title">Tebrikler!</h2>
+      <p class="modal-desc" id="modal-desc">Tüm suları güvenle geçtin.</p>
+      <div class="modal-stats" id="modal-stats"></div>
+      <button class="modal-btn" id="modal-play-again">⚓ Tekrar Oyna</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
